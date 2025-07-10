@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+</head>
+
+<body>
+    <h1>Lista de Productos</h1>
+    {% for product in object_list %}
+    <h2>{{product.name}}</h2>
+    <p>Categoría: {{product.category}}</p>
+    <p>EAN: {{product.ean}}</p>
+    {% if product.image_url %}
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="100">
+    {% endif %}
+    <hr>
+    {% endfor %}
+</body>
+
+</html>

@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.views import generic
+from .models import Product
 
 # Create your views here.
 
-def my_product(request):
-    return HttpResponse("Hello, blog!")
+class ProductList(generic.ListView):
+    queryset = Product.objects.all()
+    template_name = "product_list.html"
