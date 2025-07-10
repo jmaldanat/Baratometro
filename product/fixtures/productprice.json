@@ -1,0 +1,42 @@
+[
+  {
+    "model": "product.productprice",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "store": 1,
+      "price": "3500.00",
+      "status": 1
+    }
+  },
+  {
+    "model": "product.productprice",
+    "pk": 2,
+    "fields": {
+      "product": 1,
+      "store": 2,
+      "price": "3450.50",
+      "status": 1
+    }
+  },
+  {
+    "model": "product.productprice",
+    "pk": 3,
+    "fields": {
+      "product": 2,
+      "store": 1,
+      "price": "5200.00",
+      "status": 1
+    }
+  },
+  {
+    "model": "product.productprice",
+    "pk": 4,
+    "fields": {
+      "product": 2,
+      "store": 2,
+      "price": "5300.75",
+      "status": 2
+    }
+  }
+]
