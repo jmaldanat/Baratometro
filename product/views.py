@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Product
+from .models import ProductPrice
 
 # Create your views here.
 
 class ProductList(generic.ListView):
-    queryset = Product.objects.all()
-    template_name = "product_list.html"
+    # Obtiene el precio más bajo para cada producto (versión para PostgreSQL)
+    queryset = ProductPrice.objects.order_by('product_id', 'price').distinct('product_id')
+    template_name = "productprice_list.html"

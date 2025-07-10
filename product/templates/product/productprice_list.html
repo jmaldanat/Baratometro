@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Precios de Productos</title>
+</head>
+
+<body>
+    <h1>Lista de Precios de Productos</h1>
+    {% for price_entry in object_list %}
+    <h2>{{ price_entry.product.name }}</h2>
+    <p>Precio: ${{ price_entry.price }} en {{ price_entry.store.name }}</p>
+    <p>Categoría: {{ price_entry.product.category }}</p>
+    <p>EAN: {{ price_entry.product.ean }}</p>
+    {% if price_entry.product.image_url %}
+        <img src="{{ price_entry.product.image_url }}" alt="{{ price_entry.product.name }}" width="100">
+    {% endif %}
+    {% if price_entry.store.logo_url %}
+        <img src="{{ price_entry.store.logo_url }}" alt="{{ price_entry.store.name }}" width="100">
+    {% endif %}
+    <hr>
+    {% endfor %}
+</body>
+
+</html>
