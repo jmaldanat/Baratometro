@@ -53,6 +53,27 @@
             margin: 1rem auto;
             font-size: 1.2rem;
         }
+
+        .profile-circle-nav {
+            width: 40px;
+            height: 40px;
+            background-color: #e0f7fa;
+            color: #00796b;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            font-size: 1rem;
+        }
+
+        .compare-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 
@@ -60,13 +81,22 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand brand-logo" href="#">Barateli</a>
+            <a class="navbar-brand brand-logo" href="#">Barappteli</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-3">
+                    <!-- Profile circle SOLO visible en vista colapsada -->
+                    <li class="nav-item d-flex d-lg-none align-items-center">
+                        <a href="#" class="d-lg-none text-decoration-none text-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="profile-circle-nav align-items-center me-2">J</span>
+                                <span>Mi Perfil</span>
+                            </div>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
@@ -81,66 +111,101 @@
                     </li>
                 </ul>
                 <form class="d-flex ms-auto">
-                    <input class="form-control me-2" type="search" placeholder="Search products"
-                        aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                <!-- Profile circle SOLO visible en vista expandida -->
+                <a class="profile-circle-nav d-none d-lg-flex align-items-center text-decoration-none" href="#">J</a>
             </div>
         </div>
     </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar p-3">
-                <div class="profile-circle">B</div>
-                <h5 class="text-center">barateli_user</h5>
-                <!-- Sidebar with collapse for responsive views -->
-                <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
-                    Menu
-                </button>
-                <div class="collapse d-md-block" id="sidebarMenu">
-                    <ul class="nav flex-column mt-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">My Lists</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Price Alerts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-danger" href="#">Log out</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Main content -->
-            <div class="col-md-10 p-4">
-                <h4>My Lists</h4>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card product-card mb-4">
-                            <img src="https://via.placeholder.com/200x200.png?text=Product+Image" class="card-img-top"
-                                alt="Product">
-                            <div class="card-body">
-                                <h5 class="card-title">Barateli Favourites</h5>
-                                <p class="card-text">Electric Kettle 1.5L | £29.99 <del>£39.99</del></p>
-                                <a href="#" class="btn btn-primary btn-sm">View Details</a>
-                            </div>
+    <main>
+        <div class="container my-4">
+            <div class="row">
+                <!-- Left: images -->
+                <div class="col-md-5">
+                    <div class="product-images mb-3">
+                        <img src="https://via.placeholder.com/400x300.png?text=Main+Product" alt="Main Product"
+                            id="mainImage" class="img-fluid rounded">
+                    </div>
+                    <div class="d-flex flex-wrap">
+                        <div class="me-2 mb-2 thumbnail">
+                            <img src="https://via.placeholder.com/50.png?text=1" alt="Thumb1"
+                                onclick="document.getElementById('mainImage').src=this.src">
+                        </div>
+                        <div class="me-2 mb-2 thumbnail">
+                            <img src="https://via.placeholder.com/50.png?text=2" alt="Thumb2"
+                                onclick="document.getElementById('mainImage').src=this.src">
+                        </div>
+                        <div class="me-2 mb-2 thumbnail">
+                            <img src="https://via.placeholder.com/50.png?text=3" alt="Thumb3"
+                                onclick="document.getElementById('mainImage').src=this.src">
+                        </div>
+                        <div class="me-2 mb-2 thumbnail">
+                            <img src="https://via.placeholder.com/50.png?text=4" alt="Thumb4"
+                                onclick="document.getElementById('mainImage').src=this.src">
                         </div>
                     </div>
                 </div>
-                <h5>My Favourites</h5>
-                <p>No saved products</p>
-                <button class="btn btn-outline-primary">+ Create new list</button>
+
+                <!-- Right: product info -->
+                <div class="col-md-7">
+                    <h3>Barateli Sport Clog - Grey Shadow</h3>
+                    <!--<p><span class="text-warning"><i class="fas fa-star"></i> 4.7</span> | <a href="#"
+                            class="text-decoration-none">Price alert</a> | <a href="#"
+                            class="text-decoration-none">Compare</a></p>
+                    <p>Unisex comfort shoe. Perfect for home, beach, and everyday use.</p>-->
+                    <p>Compare prices from <strong>£25.99</strong> to <strong>£120.00</strong></p>
+
+                    <!--<div class="mb-3">
+                        <label for="sizeSelect" class="form-label">Size (UK)</label>
+                        <select class="form-select" id="sizeSelect">
+                            <option selected>Select Size</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                        </select>
+                    </div>-->
+                </div>
             </div>
         </div>
-    </div>
+        <div class="container my-4">
+            <div class="row">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5>Prices</h5>
+                    <select class="form-select w-auto">
+                        <option>Lowest Price</option>
+                        <option>Highest Price</option>
+                    </select>
+                </div>
 
+                <div class="compare-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Amazon UK</strong>
+                            <p class="mb-1"><small>Free shipping</small></p>
+                        </div>
+                        <div>
+                            <span class="fw-bold">£25.99</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="compare-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Amazon UK</strong>
+                            <p class="mb-1"><small>Free shipping</small></p>
+                        </div>
+                        <div>
+                            <span class="fw-bold">£25.99</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
     <footer class="footer mt-auto py-4 bg-dark text-center text-light">
         <div class="container">
             <p class="mb-3">&copy; 2025 Barateli - Helping you save since 2020</p>
