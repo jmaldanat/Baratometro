@@ -7,4 +7,5 @@ from .models import ProductPrice
 class ProductList(generic.ListView):
     # Obtiene el precio más bajo para cada producto (versión para PostgreSQL)
     queryset = ProductPrice.objects.order_by('product_id', 'price').distinct('product_id')
-    template_name = "productprice_list.html"
+    template_name = "product/index.html"
+    paginated_by = 10  # Número de productos por página
