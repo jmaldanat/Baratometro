@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Barateli - Compare Prices</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .brand-logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ff4081;
+        }
+
+        .container-fluid {
+            padding: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            height: 100%;
+        }
+
+        .product-card img {
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 2rem 0;
+        }
+
+        .circle-base {
+            width: 40px;
+            height: 40px;
+            background-color: #ffebf0;
+            color: #ff4081;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .profile-circle {
+            margin: 1rem auto;
+            font-size: 1.2rem;
+        }
+
+        .profile-circle-nav {
+            margin: 0 0.5rem;
+            font-size: 1rem;
+        }
+
+        .compare-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand brand-logo" href="#">Barappteli</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-3">
+                    <!-- Profile circle SOLO visible en vista colapsada -->
+                    <li class="nav-item d-flex d-lg-none align-items-center">
+                        <a href="#" class="d-lg-none text-decoration-none text-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="profile-circle-nav circle-base align-items-center me-2">J</span>
+                                <span>Mi Perfil</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <form class="d-flex ms-auto">
+                    <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <!-- Profile circle SOLO visible en vista expandida -->
+                <a class="profile-circle-nav circle-base d-none d-lg-flex align-items-center text-decoration-none"
+                    href="#">J</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar añadido desde test.html -->
+                <div class="col-md-2 sidebar p-3">
+                    <div class="profile-circle circle-base">B</div>
+                    <h5 class="text-center">barateli_user</h5>
+                    <!-- Sidebar with collapse for responsive views -->
+                    <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-expanded="false"
+                        aria-controls="sidebarMenu">
+                        Menu
+                    </button>
+                    <div class="collapse d-md-block" id="sidebarMenu">
+                        <ul class="nav flex-column mt-4">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">My Lists</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Price Alerts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="#">Log out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Main content -->
+                <div class="col-md-10 p-4">
+                    <h3 class="mb-4">Price Alerts</h3>
+                    <!-- Desktop view -->
+                    <div class="d-none d-md-block">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Last Updated</th>
+                                    <th>Starting Price</th>
+                                    <th>Current Price</th>
+                                    <th>Threshold</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/60x40.png?text=Product"
+                                                class="me-2 rounded" alt="Product">
+                                            <span>Barateli Go S Handheld Console</span>
+                                        </div>
+                                    </td>
+                                    <td>11 July 2025</td>
+                                    <td>£499.00</td>
+                                    <td>£499.00</td>
+                                    <td>£498.00</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary border-0" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </button>
+                                            <ul class="dropdown-menu shadow-sm border">
+                                                <li><a class="dropdown-item border-bottom text-primary fw-semibold"
+                                                        href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#editPriceAlertModal">Edit</a>
+                                                </li>
+                                                <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#deletePriceAlertModal">Remove</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Mobile card view -->
+                    <div class="d-md-none">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/60x40.png?text=Product"
+                                            class="me-2 rounded" alt="Product">
+                                        <div>
+                                            <h6 class="mb-0">Barateli Go S Handheld Console</h6>
+                                            <small class="text-muted">Created 11 July 2025</small>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary border-0" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                        <ul class="dropdown-menu shadow-sm border">
+                                            <li><a class="dropdown-item border-bottom text-primary fw-semibold" href="#"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editPriceAlertModal">Edit</a>
+                                            </li>
+                                            <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#deletePriceAlertModal">Remove</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3 text-center">
+                                    <div>
+                                        <small class="text-muted">Starting price</small>
+                                        <div class="fw-bold">£499.00</div>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Price now</small>
+                                        <div class="fw-bold">£499.00</div>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Threshold</small>
+                                        <div class="fw-bold">£498.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Edit Price Alert Modal -->
+        <div class="modal fade" id="editPriceAlertModal" tabindex="-1" aria-labelledby="editPriceAlertLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPriceAlertLabel">Edit price alert</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/60x40.png?text=Product" class="me-2 rounded"
+                                alt="Product">
+                            <div>
+                                <strong>Barateli Go S Handheld Console</strong>
+                                <div class="small text-muted">Starting price £499.00 | Price now £499.00 | Threshold
+                                    £498.00</div>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="alertOption" id="alertDrop" checked>
+                            <label class="form-check-label" for="alertDrop">
+                                Notify me when the price has dropped
+                            </label>
+                            <input type="number" class="form-control mt-2"
+                                placeholder="Minimum price reduction per message (£)">
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="alertOption" id="alertTarget">
+                            <label class="form-check-label" for="alertTarget">
+                                Notify me when my target price has been reached
+                            </label>
+                        </div>
+
+                        <a href="#" class="small text-decoration-none mb-3 d-inline-block">Advanced settings <i
+                                class="fas fa-chevron-down"></i></a>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary w-45"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-dark w-45">Update</button>
+                        </div>
+
+                        <div class="mt-3 text-center">
+                            <a href="#" class="text-danger small text-decoration-none" data-bs-toggle="modal"
+                                data-bs-target="#deletePriceAlertModal">Delete price alert</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Price Alert Modal -->
+        <div class="modal fade" id="deletePriceAlertModal" tabindex="-1" aria-labelledby="deletePriceAlertLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deletePriceAlertLabel">Delete price alert</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the price alert? You can always create a new one.</p>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary w-45"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-dark w-45">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-4 bg-dark text-center text-light">
+        <div class="container">
+            <p class="mb-3">&copy; 2025 Barateli - Helping you save since 2020</p>
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>About Barateli</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Who we are</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>Learn more</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Get started</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Safe shopping tips</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Partners</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Why join Barateli?</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Register your shop</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
