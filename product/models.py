@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from datetime import date
 
 # Create your models here.
 
@@ -52,6 +53,37 @@ class ProductPrice(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(ProductPriceStatus, on_delete=models.SET_NULL, null=True, related_name='product_prices_status')
     updated_on = models.DateTimeField(auto_now=True)
+    price_min = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    price_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    min_on = models.DateField(null=True, blank=True)
+    max_on = models.DateField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Overrides the save method to update historical min/max prices.
+        """
+        today = date.today()
+
+        # Initialize min/max prices if they are not set (for new or migrated objects)
+        if self.price_min is None:
+            self.price_min = self.price
+            self.min_on = today
+        
+        if self.price_max is None:
+            self.price_max = self.price
+            self.max_on = today
+
+        # Update min price if current price is lower
+        if self.price < self.price_min:
+            self.price_min = self.price
+            self.min_on = today
+
+        # Update max price if current price is higher
+        if self.price > self.price_max:
+            self.price_max = self.price
+            self.max_on = today
+            
+        super(ProductPrice, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.product.name} at {self.store.name} - ${self.price}"
