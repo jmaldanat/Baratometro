@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Barateli - Compare Prices</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .brand-logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ff4081;
+        }
+
+        .container-fluid {
+            padding: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            height: 100%;
+        }
+
+        .product-card img {
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 2rem 0;
+        }
+
+        .profile-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #ffebf0;
+            color: #ff4081;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand brand-logo" href="#">Barateli</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <form class="d-flex ms-auto">
+                    <input class="form-control me-2" type="search" placeholder="Search products"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-3">
+                <div class="profile-circle">B</div>
+                <h5 class="text-center">barateli_user</h5>
+                <!-- Sidebar with collapse for responsive views -->
+                <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
+                    Menu
+                </button>
+                <div class="collapse d-md-block" id="sidebarMenu">
+                    <ul class="nav flex-column mt-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">My Lists</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Price Alerts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="#">Log out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col-md-10 p-4">
+                <h4>My Lists</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card product-card mb-4">
+                            <img src="https://via.placeholder.com/200x200.png?text=Product+Image" class="card-img-top"
+                                alt="Product">
+                            <div class="card-body">
+                                <h5 class="card-title">Barateli Favourites</h5>
+                                <p class="card-text">Electric Kettle 1.5L | £29.99 <del>£39.99</del></p>
+                                <a href="#" class="btn btn-primary btn-sm">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h5>My Favourites</h5>
+                <p>No saved products</p>
+                <button class="btn btn-outline-primary">+ Create new list</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-4 bg-dark text-center text-light">
+        <div class="container">
+            <p class="mb-3">&copy; 2025 Barateli - Helping you save since 2020</p>
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>About Barateli</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Who we are</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>Learn more</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Get started</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Safe shopping tips</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Partners</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Why join Barateli?</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Register your shop</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
