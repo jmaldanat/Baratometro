@@ -30,53 +30,55 @@
 {% block FeaturedProducts %}
 <section class="container container-fluid">
     <div class="row justify-content-center">
-        <!-- Main content -->
-        <div class="col-md-10 p-4">
+        <div class="col-12 p-4">
             <h2 class="fw-bold mb-4">10 Most Popular Products</h2>
-            <div class="row">
-                {% for price_entry in productprice_list %}
-                <div class="col-md-3 d-flex" id="productCard">
-                    <a href="#" class="w-100 text-decoration-none text-dark">
-                        <div class="card mb-4 w-100 h-100 product-card">
-                            <div class="card-body d-flex flex-column">
-                                <div class="image-container">
-                                    {% if "placeholder" in price_entry.product.image_url %}
-                                    <img class="card-img-top" src="{{ price_entry.product.image_url }}"
-                                        alt="placeholder image">
-                                    {% else %}
-                                    <img class="card-img-top" src="{{ price_entry.product.image_url }}"
-                                        alt="{{ price_entry.product.name }}">
-                                    {% endif %}
-                                </div>
-                                <h5 class="card-title">{{ price_entry.product.name }}</h5>
-                                <p class="card-text">{{ price_entry.store.name }} | £29.99 <del>£39.99</del></p>
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for price_entry in productprice_list %}
+                    {% if forloop.counter0|divisibleby:5 %}
+                    <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                        <div class="row justify-content-center row-cols-1 row-cols-md-5 g-4">
+                            {% endif %}
+                            <div class="col d-flex">
+                                <a href="#" class="w-100 text-decoration-none text-dark">
+                                    <div class="card h-100" id="productCard">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="image-container">
+                                                {% if "placeholder" in price_entry.product.image_url %}
+                                                <img class="card-img-top img-fluid"
+                                                    src="{{ price_entry.product.image_url }}" alt="placeholder image">
+                                                {% else %}
+                                                <img class="card-img-top img-fluid"
+                                                    src="{{ price_entry.product.image_url }}"
+                                                    alt="{{ price_entry.product.name }}">
+                                                {% endif %}
+                                            </div>
+                                            <h5 class="card-title">{{ price_entry.product.name }}</h5>
+                                            <p class="card-text">{{ price_entry.store.name }} | £29.99 <del>£39.99</del>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
+                            {% if forloop.counter|divisibleby:5 or forloop.last %}
                         </div>
-                    </a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
-                {% if forloop.counter|divisibleby:4 %}
-            </div>
-            <div class="row">
-                {% endif %}
-                {% endfor %}
+                <button class="carousel-control-prev custom-carousel-btn" type="button"
+                    data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="custom-arrow">&lt;</span>
+                </button>
+                <button class="carousel-control-next custom-carousel-btn" type="button"
+                    data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="custom-arrow">&gt;</span>
+                </button>
+
+
             </div>
         </div>
     </div>
-
-    <!-- {% if is_paginated %}
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li>
-                <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV</a>
-            </li>
-            {% endif %}
-            {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}-->
 </section>
 {% endblock %}
 {% block AboutColumns %}
