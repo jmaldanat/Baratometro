@@ -1,0 +1,64 @@
+{% extends "newbase.html" %}
+{% load static %}
+{% block Content %}
+<section class="container container-fluid">
+    <div class="container my-4">
+        <div class="row">
+            <!-- Left: images -->
+            <div class="col-md-5">
+                <div class="product-images mb-3">
+                    <img src="{{ product.image_url }}" alt="Main Product" id="mainImage"
+                        class="img-fluid rounded w-75 mx-auto d-block">
+                </div>
+            </div>
+
+            <!-- Right: product info -->
+            <div class="col-md-7">
+                <h3>{{ product.name }}</h3>
+                <!-- <p><span class="text-warning"><i class="fas fa-star"></i> 4.7</span> | <a href="#"
+                            class="text-decoration-none">Price alert</a> | <a href="#"
+                            class="text-decoration-none">Compare</a></p>
+                    <p>Unisex comfort shoe. Perfect for home, beach, and everyday use.</p>-->
+                <p>
+                    Compare prices from <strong>£{{ min_price }}</strong> to <strong>£{{ max_price }}</strong>
+                </p>
+                <div class="container my-4">
+                    <div class="row">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5>Prices</h5>
+                            <select class="form-select w-auto">
+                                <option>Lowest Price</option>
+                                <option>Highest Price</option>
+                            </select>
+                        </div>
+                        {% for price in product_prices %}
+                        <div class="compare-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ price.store.name }}</strong>
+                                    <p class="mb-1"><small>{% if price.status.name %}{{ price.status.name }}{% endif %}</small>
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">£{{ price.price }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--<div class="mb-3">
+                        <label for="sizeSelect" class="form-label">Size (UK)</label>
+                        <select class="form-select" id="sizeSelect">
+                            <option selected>Select Size</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                        </select>
+                    </div>-->
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

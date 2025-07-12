@@ -1,11 +1,40 @@
 from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from .models import ProductPrice
 
 # Create your views here.
 
 class ProductList(generic.ListView):
-    # Obtiene el precio más bajo para cada producto (versión para PostgreSQL)
     queryset = ProductPrice.objects.order_by('product_id', 'price').distinct('product_id')
     template_name = "product/newindex.html"
-    #paginate_by = 4  # Número de productos por página
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        productprice_list = []
+        for entry in self.queryset:
+            prices = ProductPrice.objects.filter(product=entry.product)
+            entry.price_min = min((p.price for p in prices), default=None)
+            entry.price_max = max((p.price_max for p in prices if p.price_max is not None), default=None)
+            productprice_list.append(entry)
+        context['productprice_list'] = productprice_list
+        return context
+
+def product_detail(request, slug):
+    product_prices = ProductPrice.objects.filter(product__slug=slug).select_related('store', 'product')
+    product = product_prices.first().product if product_prices.exists() else None
+
+    prices = [p.price for p in product_prices]
+    min_price = min(prices) if prices else None
+    max_price = max(prices) if prices else None
+
+    return render(
+        request,
+        "product/newproduct_detail.html",
+        {
+            "product": product,
+            "product_prices": product_prices,
+            "min_price": min_price,
+            "max_price": max_price,
+        },
+    )
