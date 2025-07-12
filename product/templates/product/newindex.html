@@ -37,7 +37,7 @@
                     {% for price_entry in productprice_list %}
                     {% if forloop.counter0|divisibleby:5 %}
                     <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
-                        <div class="row justify-content-center row-cols-1 row-cols-md-5 g-4">
+                        <div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
                             {% endif %}
                             <div class="col d-flex">
                                 <a href="#" class="w-100 text-decoration-none text-dark">
