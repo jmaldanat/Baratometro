@@ -1,0 +1,111 @@
+{% load static %}
+{% url 'home' as home_url %}
+
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Barappteli - Compara Precios</title>
+
+    <!-- Google Fonts CSS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style-barappteli.css' %}">
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-custom">
+        <div class="container container-fluid">
+            <a class="navbar-brand brand-logo" href="{% url 'home' %}">Barappteli</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-3">
+                    <!-- Profile circle SOLO visible en vista colapsada -->
+                    <li class="nav-item d-flex d-lg-none align-items-center">
+                        <a href="#" class="d-lg-none text-decoration-none text-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="profile-circle-nav circle-base align-items-center me-2">J</span>
+                                <span>Mi Perfil</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <form class="d-flex ms-auto">
+                    <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <!-- Profile circle SOLO visible en vista expandida -->
+                <a class="profile-circle-nav circle-base d-none d-lg-flex align-items-center text-decoration-none"
+                    href="#">J</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        {% block content %}
+        <!-- Content Goes here -->
+        {% endblock content %}
+    </main>
+    <footer class="footer mt-auto py-4 bg-dark text-center text-light">
+        <div class="container">
+            <p class="mb-3">&copy; 2025 Barateli - Helping you save since 2020</p>
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>About Barateli</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Who we are</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6>Learn more</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Get started</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Safe shopping tips</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Partners</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Why join Barateli?</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Register your shop</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

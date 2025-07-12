@@ -1,0 +1,131 @@
+{% extends "newbase.html" %}
+
+{% block content %}
+<header>
+    <div class="container">
+        <div class="container-fluid bg-dark text-white py-5 rounded-4 mb-4 position-relative overflow-hidden"
+            style="background: url('https://images.ctfassets.net/31h9ykss8g0q/1Kn6ZHUHZXaXFSnysmTfQe/560e2d2825b2ce45ea9279cff28fe8b1/Web_hero_desktop.jpg?w=1600&q=80&fm=jpg') center/cover no-repeat;">
+            <div class="row align-items-center" style="border-radius: 1rem;">
+                <!-- Left: text -->
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h1 class="display-5 fw-bold hero-title">Search, compare, save<br>Find your next deal today</h1>
+                    <p class="lead mt-3 hero-lead">
+                        At Barateli you can compare prices on <strong>8 million products</strong> from <strong>6,300
+                            shops</strong>.
+                    </p>
+                    <form class="d-flex mt-4">
+                        <input type="text" class="form-control rounded-pill me-2"
+                            placeholder="What are you looking for today?">
+                        <button type="submit" class="btn btn-light rounded-pill">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="container container-fluid">
+    <div class="row">
+        <!-- Main content -->
+        <div class="col-md-10 p-4">
+            <h2 class="fw-bold mb-4">10 Most Popular Products</h2>
+            <div class="row">
+                {% for price_entry in productprice_list %}
+                <div class="col-md-3 d-flex" id="productCard">
+                    <a href="#" class="w-100 text-decoration-none text-dark">
+                        <div class="card mb-4 w-100 h-100 product-card">
+                            <div class="card-body d-flex flex-column">
+                                <div class="image-container">
+                                    {% if "placeholder" in post.featured_image.url %}
+                                    <img class="card-img-top" src="{{ price_entry.product.image_url }}" alt="placeholder image">
+                                    {% else %}
+                                    <img class="card-img-top" src="{{ price_entry.product.image_url }}" alt="{{ price_entry.product.name }}">
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">{{ price_entry.product.name }}</h5>
+                                <p class="card-text">{{ price_entry.store.name }} | £29.99 <del>£39.99</del></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</section>
+<section class="container container-fluid">
+    <div class="my-5" style="margin-top: 0rem !important">
+        <p class="text-uppercase small fw-semibold text-muted">About Barateli</p>
+        <h2 class="fw-bold mb-4" style="max-width: 500rem !important">Our ambition is to create a fantastic
+            service and experience for all consumers</h2>
+        <div class="row">
+            <!-- Card 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="d-flex">
+                    <i class="fas fa-percent fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Find products at the best price</h5>
+                        <p class="small">
+                            At Barateli you can find and compare the lowest prices on more than 8 million
+                            products
+                            from over 6,300 online stores. We're constantly adding new products and stores every
+                            day
+                            to ensure you get the most relevant information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="d-flex">
+                    <i class="fas fa-shield-alt fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Independent and trustworthy</h5>
+                        <p class="small">
+                            Barateli is an independent informational service offering real price comparisons. No
+                            store can influence what you see. Retailers may advertise, but this does not affect
+                            how
+                            they appear in search results.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="d-flex">
+                    <i class="fas fa-trophy fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Free to use</h5>
+                        <p class="small">
+                            Barateli helps you shop smart with free access to useful info. We even offer Buyer
+                            Protection for purchases up to £5,000 at participating shops. If you prefer apps,
+                            we've
+                            got you covered too!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+</html>
