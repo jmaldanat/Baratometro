@@ -51,6 +51,10 @@ footer {
     font-size: 1rem;
 }
 
+#productCard {
+    margin-bottom: 0.5rem;
+}
+
 #productCard .card-img-top {
     transition: transform 0.3s ease;
 }
