@@ -1,5 +1,6 @@
 {% load static %}
 {% url 'home' as home_url %}
+{% url 'perfil' as perfil_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
@@ -43,7 +44,7 @@
                     <!-- Profile circle SOLO visible en vista colapsada -->
                     {% if user.is_authenticated %}
                     <li class="nav-item d-flex d-lg-none align-items-center">
-                        <a href="#" class="d-lg-none text-decoration-none text-dark">
+                        <a href="{{ perfil_url }}" class="d-lg-none text-decoration-none text-dark">
                             <div class="d-flex align-items-center">
                                 <span class="profile-circle-nav circle-base align-items-center me-2">J</span>
                                 <span>Mi Perfil</span>
@@ -77,7 +78,7 @@
                 <!-- Profile circle SOLO visible en vista expandida -->
                 {% if user.is_authenticated %}
                 <a class="profile-circle-nav circle-base d-none d-lg-flex align-items-center text-decoration-none"
-                    href="#">J</a>
+                    href="{{ perfil_url }}">J</a>
                 {% else %}
                 <a href="{% url 'account_login' %}" class="btn btn-outline-secondary rounded-pill px-4 ms-2 d-none d-lg-inline-block">
                     Login
