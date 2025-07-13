@@ -31,21 +31,43 @@
                                 <option>Highest Price</option>
                             </select>
                         </div>
-                        {% for price in product_prices %}
-                        <div class="compare-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ price.store.name }}</strong>
-                                    <p class="mb-1"><small>{% if price.status.name %}{{ price.status.name }}{% endif %}</small>
-                                    </p>
+                        <div id="priceCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for price in product_prices %}
+                                {% if forloop.counter0|divisibleby:3 %}
+                                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                                    <div class="d-flex flex-column gap-2">
+                                        {% endif %}
+                                        <div class="compare-card mb-0">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong>{{ price.store.name }}</strong>
+                                                    <p class="mb-1">
+                                                        <small>{% if price.status.name %}{{ price.status.name }}{% endif %}</small>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <span class="fw-bold">£{{ price.price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if forloop.counter|divisibleby:3 or forloop.last %}
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="fw-bold">£{{ price.price }}</span>
-                                </div>
+                                {% endif %}
+                                {% endfor %}
                             </div>
+                            {% if product_prices|length > 3 %}
+                            <button class="carousel-control-prev custom-carousel-btn" type="button"
+                                data-bs-target="#priceCarousel" data-bs-slide="prev">
+                                <span class="custom-arrow">&lt;</span>
+                            </button>
+                            <button class="carousel-control-next custom-carousel-btn" type="button"
+                                data-bs-target="#priceCarousel" data-bs-slide="next">
+                                <span class="custom-arrow">&gt;</span>
+                            </button>
+                            {% endif %}
                         </div>
-                        {% endfor %}
-                    </div>
                 </div>
                 <!--<div class="mb-3">
                         <label for="sizeSelect" class="form-label">Size (UK)</label>
