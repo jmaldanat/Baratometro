@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render,  get_list_or_404, get_object_or_404
 from django.views import generic
 from .models import ProductPrice
 
@@ -20,9 +19,10 @@ class ProductList(generic.ListView):
         context['productprice_list'] = productprice_list
         return context
 
+
 def product_detail(request, slug):
-    product_prices = ProductPrice.objects.filter(product__slug=slug).select_related('store', 'product')
-    product = product_prices.first().product if product_prices.exists() else None
+    product_prices = get_list_or_404(ProductPrice.objects.select_related('store', 'product'), product__slug=slug)
+    product = product_prices[0].product if product_prices else None
 
     prices = [p.price for p in product_prices]
     min_price = min(prices) if prices else None
