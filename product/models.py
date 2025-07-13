@@ -57,6 +57,8 @@ class ProductPrice(models.Model):
     price_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     min_on = models.DateField(null=True, blank=True)
     max_on = models.DateField(null=True, blank=True)
+    sku = models.CharField(max_length=100, blank=True, null=True)  # SKU del producto
+    link = models.URLField(blank=True, null=True)  # URL del producto en la tienda
 
     def save(self, *args, **kwargs):
         """
