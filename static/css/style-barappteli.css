@@ -12,17 +12,6 @@ body {
     padding: 1.5rem;
 }
 
-.sidebar {
-    background-color: #fff;
-    border-right: 1px solid #ddd;
-    height: 100%;
-}
-
-/* .product-card img {
-    max-height: 150px;
-    object-fit: contain;
-} */
-
 footer {
     background-color: #1a1a1a;
     color: #fff;
