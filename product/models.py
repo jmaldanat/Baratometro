@@ -67,11 +67,11 @@ class ProductPrice(models.Model):
         today = date.today()
 
         # Initialize min/max prices if they are not set (for new or migrated objects)
-        if self.price_min is None:
+        if self.price_min is None or self.price_min == '':
             self.price_min = self.price
             self.min_on = today
         
-        if self.price_max is None:
+        if self.price_max is None or self.price_max == '':
             self.price_max = self.price
             self.max_on = today
 
