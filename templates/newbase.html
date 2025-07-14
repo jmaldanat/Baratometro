@@ -71,10 +71,18 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                 </ul>
+                {% if user.is_authenticated %}
                 <form class="d-flex ms-auto">
                     <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                {% else %}
+                <div class="ms-auto">
+                    <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">
+                        <small>Inicia sesión para buscar productos</small>
+                    </a>
+                </div>
+                {% endif %}
                 <!-- Profile circle SOLO visible en vista expandida -->
                 {% if user.is_authenticated %}
                 <a class="profile-circle-nav circle-base d-none d-lg-flex align-items-center text-decoration-none"
