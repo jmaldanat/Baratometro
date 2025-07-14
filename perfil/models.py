@@ -8,6 +8,9 @@ class Plan(models.Model):
     price_per_month = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 class Perfil(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='perfil')
     nombre = models.CharField(max_length=150, blank=True, null=True)
@@ -15,10 +18,22 @@ class Perfil(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name='perfiles', null=True, blank=True)
+    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name='perfiles', null=True, blank=True, default="free")
 
     def __str__(self):
         return self.nombre or str(self.user)
+
+    def can_save_more_products(self):
+        """Verifica si el usuario puede guardar más productos según su plan"""
+        if not self.plan:
+            return False
+
+        current_saved_count = SavedProduct.objects.filter(user=self.user).count()
+        return current_saved_count < self.plan.product_limit
+
+    def saved_products_count(self):
+        """Retorna el número de productos guardados por el usuario"""
+        return SavedProduct.objects.filter(user=self.user).count()
 
 class SavedProduct(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='saved_products')
