@@ -6,6 +6,11 @@ from .models import Perfil, Plan
 @receiver(post_save, sender=get_user_model())
 def crear_perfil_usuario(sender, instance, created, **kwargs):
     if created:
-        # Puedes asignar un plan por defecto si lo deseas
-        plan_default = Plan.objects.first()
-        Perfil.objects.create(user=instance, plan=plan_default)
+        # Get the free plan specifically
+        plan_default = Plan.objects.filter(name="free").first()
+        # Create the profile and copy the email from the user account
+        Perfil.objects.create(
+            user=instance, 
+            plan=plan_default,
+            email=instance.email  # Copy email from user to perfil
+        )

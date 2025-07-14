@@ -18,7 +18,7 @@ class Perfil(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name='perfiles', null=True, blank=True, default="free")
+    plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, related_name='perfiles', null=True, blank=True)
 
     def __str__(self):
         return self.nombre or str(self.user)
