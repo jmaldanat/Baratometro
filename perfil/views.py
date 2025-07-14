@@ -1,11 +1,13 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .models import SavedProduct, ProductAlert
 from product.models import ProductPrice  # importa el modelo de precios
+from django.contrib.auth import logout
+from django import forms
 
 class PerfilView(LoginRequiredMixin, TemplateView):
     template_name = 'perfil/perfil.html'
@@ -71,4 +73,30 @@ class AccountSettingsView(LoginRequiredMixin, TemplateView):
         messages.success(request, 'Profile information updated successfully!')
         
         # Redirect back to the settings page
+        return redirect('profile_account')
+
+class DeleteAccountConfirmForm(forms.Form):
+    deleteConfirm = forms.CharField(required=True)
+    
+    def clean_deleteConfirm(self):
+        confirm = self.cleaned_data.get('deleteConfirm')
+        if confirm != 'DELETE':
+            raise forms.ValidationError("Please type DELETE to confirm account deletion")
+        return confirm
+
+class DeleteAccountView(LoginRequiredMixin, FormView):
+    form_class = DeleteAccountConfirmForm
+    success_url = reverse_lazy('home')  # Redirect to home page after deletion
+    
+    def form_valid(self, form):
+        user = self.request.user
+        # Delete the user
+        user.delete()
+        # Log the user out
+        logout(self.request)
+        messages.success(self.request, "Your account has been permanently deleted.")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Account deletion failed. Please try again.")
         return redirect('profile_account')
