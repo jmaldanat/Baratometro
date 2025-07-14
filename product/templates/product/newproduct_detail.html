@@ -6,9 +6,36 @@
         <div class="row">
             <!-- Left: images -->
             <div class="col-md-5">
-                <div class="product-images mb-3">
+                <div class="position-relative mb-3">
                     <img src="{{ product.image_url }}" alt="Main Product" id="mainImage"
-                        class="img-fluid rounded w-75 mx-auto d-block">
+                        class="img-fluid rounded w-100">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        {% if user.is_authenticated %}
+                            {% if is_saved %}
+                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#deleteProductModal">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            {% else %}
+                                {% if can_save_more %}
+                                    <form method="post" action="{% url 'save_product' product.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_slug" value="{{ product.slug }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#limitReachedModal">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-sm btn-outline-primary">
+                                <i class="far fa-heart"></i>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
@@ -183,6 +210,25 @@
                         <button type="submit" class="btn btn-dark w-45">Eliminar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de límite alcanzado -->
+<div class="modal fade" id="limitReachedModal" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="limitReachedModalLabel">Límite alcanzado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                Has alcanzado el límite de productos guardados para tu plan.<br>
+                <a href="{% url 'perfil' %}">Actualiza tu plan</a> para guardar más productos.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
