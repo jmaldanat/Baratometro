@@ -8,8 +8,8 @@
     <div class="row">
         <!-- Sidebar con diseño mejorado -->
         <div class="col-md-3 sidebar p-3 bg-white border-end h-100">
-            <div class="profile-circle circle-base mx-auto my-3">B</div>
-            <h5 class="text-center mb-4">barateli_user</h5>
+            <div class="profile-circle circle-base mx-auto my-3">{{ user.username|first|upper }}</div>
+            <h5 class="text-center mb-4">{{ user.username }}</h5>
             <!-- Sidebar with collapse for responsive views -->
             <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
