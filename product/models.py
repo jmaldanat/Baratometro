@@ -28,6 +28,12 @@ class Product(models.Model):
         
         super(Product, self).save(*args, **kwargs)
 
+    def saved_by_count(self):
+        """
+        Retorna el número de usuarios diferentes que han guardado este producto
+        """
+        return self.saved_by_users.count()    
+
     def __str__(self):
         return self.name
 
