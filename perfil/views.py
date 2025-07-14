@@ -45,3 +45,30 @@ class PerfilView(LoginRequiredMixin, TemplateView):
         
         # Redirect back to the profile page
         return HttpResponseRedirect(reverse('perfil'))
+
+class AccountSettingsView(LoginRequiredMixin, TemplateView):
+    template_name = 'perfil/account_settings.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add any additional context needed for the account settings page
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        # Get the profile data from the form
+        nombre = request.POST.get('nombre', '')
+        telefono = request.POST.get('telefono', '')
+        direccion = request.POST.get('direccion', '')
+        
+        # Update the user's profile
+        perfil = request.user.perfil
+        perfil.nombre = nombre
+        perfil.telefono = telefono
+        perfil.direccion = direccion
+        perfil.save()
+        
+        # Add a success message
+        messages.success(request, 'Profile information updated successfully!')
+        
+        # Redirect back to the settings page
+        return redirect('profile_account')

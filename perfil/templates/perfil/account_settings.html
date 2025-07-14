@@ -1,0 +1,104 @@
+<!-- Create this file: perfil/templates/perfil/account_settings.html -->
+{% extends "newbase.html" %}
+{% load static %}
+{% block Content %}
+{% url 'account_logout' as logout_url %}
+
+<div class="container container-fluid">
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <!-- Sidebar con diseño mejorado -->
+        <div class="col-md-3 sidebar p-3 bg-white border-end h-100">
+            <div class="profile-circle circle-base mx-auto my-3">B</div>
+            <h5 class="text-center mb-4">barateli_user</h5>
+            <!-- Sidebar with collapse for responsive views -->
+            <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
+                Menu
+            </button>
+            <div class="collapse d-md-block" id="sidebarMenu">
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perfil' %}"><i class="fas fa-list me-2"></i>My Lists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Price Alerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'profile_account' %}"><i
+                                class="fas fa-cog me-2"></i>Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{{ logout_url }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Log out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Main content -->
+        <div class="col-md-9 p-4">
+            <h2 class="fw-bold mb-4">Account Settings</h2>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Profile Information</h5>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre"
+                                value="{{ user.perfil.nombre|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono"
+                                value="{{ user.perfil.telefono|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Address</label>
+                            <textarea class="form-control" id="direccion" name="direccion"
+                                rows="3">{{ user.perfil.direccion|default:'' }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <!--<div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Security</h5>
+                    <a href="{% url 'account_change_password' %}" class="btn btn-outline-secondary mb-2">Change
+                        Password</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Account Plan</h5>
+                    <p>Current plan: <strong>{{ user.perfil.plan.name|default:"Free" }}</strong></p>
+                    <a href="#" class="btn btn-primary">Upgrade Plan</a>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+{% endblock %}
