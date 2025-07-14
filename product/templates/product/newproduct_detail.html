@@ -134,8 +134,9 @@
 
 {% if user.is_authenticated %}
     {% if is_saved %}
-        <button class="btn btn-sm btn-success mb-3" disabled>
-            <i class="fas fa-bookmark mr-1"></i> Producto guardado
+        <!-- Botón para abrir el modal de eliminación -->
+        <button class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#deleteProductModal">
+            <i class="fas fa-heart mr-1"></i> Producto guardado (Eliminar)
         </button>
     {% else %}
         {% if can_save_more %}
@@ -143,12 +144,12 @@
                 {% csrf_token %}
                 <input type="hidden" name="product_slug" value="{{ product.slug }}">
                 <button type="submit" class="btn btn-sm btn-outline-primary mb-3">
-                    <i class="far fa-bookmark mr-1"></i> Guardar producto
+                    <i class="far fa-heart mr-1"></i> Guardar producto
                 </button>
             </form>
         {% else %}
             <button class="btn btn-sm btn-outline-secondary mb-3" disabled>
-                <i class="far fa-bookmark mr-1"></i> Límite alcanzado
+                <i class="far fa-heart mr-1"></i> Límite alcanzado
             </button>
             <div class="small text-danger">
                 Has alcanzado el límite de productos guardados para tu plan.
@@ -158,7 +159,32 @@
     {% endif %}
 {% else %}
     <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-sm btn-outline-primary mb-3">
-        <i class="far fa-bookmark mr-1"></i> Iniciar sesión para guardar
+        <i class="far fa-heart mr-1"></i> Iniciar sesión para guardar
     </a>
 {% endif %}
+
+<!-- Modal de eliminar producto guardado -->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Eliminar producto guardado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Seguro que quieres eliminar este producto de tu lista? Puedes volver a guardarlo cuando quieras.</p>
+                <form id="deleteProductForm" method="post" action="{% url 'unsave_product' product.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_slug" value="{{ product.slug }}">
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-secondary w-45"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark w-45">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

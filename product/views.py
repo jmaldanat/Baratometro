@@ -90,3 +90,15 @@ def save_product(request, product_id):
     
     # Si no es POST, redirigir a la página del producto
     return redirect('home')
+
+@login_required
+def unsave_product(request, product_id):
+    if request.method == 'POST':
+        try:
+            saved_product = SavedProduct.objects.get(user=request.user, product_id=product_id)
+            saved_product.delete()
+            messages.success(request, "Producto eliminado de tu lista.")
+        except SavedProduct.DoesNotExist:
+            messages.error(request, "No se encontró el producto en tu lista.")
+        return redirect('product_detail', slug=request.POST.get('product_slug'))
+    return redirect('home')
