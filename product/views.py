@@ -2,24 +2,61 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404, redirec
 from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from .models import ProductPrice, Product
 from perfil.models import SavedProduct
 
 # Create your views here.
 
 class ProductList(generic.ListView):
-    queryset = ProductPrice.objects.order_by('product_id', 'price').distinct('product_id')
     template_name = "product/newindex.html"
-
+    context_object_name = 'productprice_list'
+    
+    def get_queryset(self):
+        # Get top 10 most saved products
+        top_products = (
+            SavedProduct.objects.values('product')
+            .annotate(save_count=Count('product'))
+            .order_by('-save_count')[:10]
+        )
+        
+        # Get product IDs from the query
+        product_ids = [item['product'] for item in top_products]
+        
+        # Get the lowest price entry for each popular product
+        if product_ids:
+            queryset = []
+            for product_id in product_ids:
+                # Get the lowest price entry for this product
+                price_entry = ProductPrice.objects.filter(
+                    product_id=product_id
+                ).order_by('price').first()
+                
+                if price_entry:
+                    # Add save count as attribute for template use
+                    save_count = next(
+                        item['save_count'] for item in top_products 
+                        if item['product'] == product_id
+                    )
+                    price_entry.save_count = save_count
+                    queryset.append(price_entry)
+            return queryset
+        else:
+            # Fallback to original behavior if no saved products
+            return ProductPrice.objects.order_by('product_id', 'price').distinct('product_id')
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         productprice_list = []
-        for entry in self.queryset:
+        
+        for entry in self.object_list:
             prices = ProductPrice.objects.filter(product=entry.product)
             entry.price_min = min((p.price for p in prices), default=None)
             entry.price_max = max((p.price_max for p in prices if p.price_max is not None), default=None)
             productprice_list.append(entry)
+            
         context['productprice_list'] = productprice_list
+        context['is_popular_list'] = True  # Flag to indicate this is the popular products list
         return context
 
 
