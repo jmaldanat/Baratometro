@@ -47,15 +47,16 @@
                     <li class="nav-item d-flex d-lg-none align-items-center pt-3 pb-3">
                         <a href="{{ perfil_url }}" class="d-lg-none text-decoration-none text-dark">
                             <div class="d-flex align-items-center">
-                                <span class="profile-circle-nav circle-base align-items-center me-2">{{ user.username|first|upper }}</span>
+                                <span class="profile-circle-nav circle-base align-items-center me-2">{{
+                                    user.username|first|upper }}</span>
                                 <span>Mi Perfil | {{ user.username }}</span>
                             </div>
                         </a>
                     </li>
                     {% else %}
                     <li class="nav-item d-lg-none">
-                        <a class="nav-link d-lg-none {% if request.path == login_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'account_login' %}">Login</a>
+                        <a class="nav-link d-lg-none {% if request.path == login_url %}active{% endif %}"
+                            aria-current="page" href="{% url 'account_login' %}">Login</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
@@ -73,14 +74,16 @@
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
-                <form class="d-flex ms-auto">
-                    <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                <form class="d-flex ms-auto" action="{% url 'create_task_from_url' %}" method="post">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="url" name="search_url" placeholder="Enter product URL"
+                        aria-label="Search URL" required>
+                    <button class="btn btn-outline-success" type="submit">Track</button>
                 </form>
                 {% else %}
                 <div class="ms-auto">
-                    <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">
-                        <small>Inicia sesión para buscar productos</small>
+                    <a href="{% url 'account_login' %}?next={% url 'home' %}" class="btn btn-outline-secondary">
+                        <small>Inicia sesión para seguir productos</small>
                     </a>
                 </div>
                 {% endif %}
@@ -89,7 +92,8 @@
                 <a class="profile-circle-nav circle-base d-none d-lg-flex align-items-center text-decoration-none"
                     href="{{ perfil_url }}">{{ user.username|first|upper }}</a>
                 {% else %}
-                <a href="{% url 'account_login' %}" class="btn btn-outline-secondary rounded-pill px-4 ms-2 d-none d-lg-inline-block">
+                <a href="{% url 'account_login' %}"
+                    class="btn btn-outline-secondary rounded-pill px-4 ms-2 d-none d-lg-inline-block">
                     Login
                 </a>
                 {% endif %}
@@ -115,7 +119,7 @@
         {% endblock Content %}
 
     </main>
-    
+
     <footer class="footer mt-auto py-4 bg-dark text-center text-light">
         <div class="container">
             <p class="mb-3">&copy; 2025 Barateli - Helping you save since 2020</p>

@@ -1,10 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from .models import Task
+from product.models import Product
+from django.contrib import messages
+import re
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Task
 from django.utils import timezone
 
 class TaskView(LoginRequiredMixin, TemplateView):
@@ -16,5 +19,33 @@ class TaskView(LoginRequiredMixin, TemplateView):
         # Get all tasks for the current user
         context['tasks'] = Task.objects.filter(user=user).order_by('-created_on')
         return context
+
+@login_required
+def create_task_from_url(request):
+    if request.method == 'POST':
+        url = request.POST.get('search_url', '')
+        
+        # Basic URL validation
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+            
+        # Create a basic title from the URL
+        domain = re.search(r'://([^/]+)', url)
+        title = f"Track product on {domain.group(1) if domain else url}"
+        
+        # Create the task without specifying a product
+        task = Task.objects.create(
+            title=title,
+            url=url,
+            content=f"Task created to track product at {url}",
+            user=request.user,
+            status='pending'
+        )
+        
+        messages.success(request, f"New tracking task created for: {url}")
+        return redirect('task')
+    
+    # If not POST, redirect to home
+    return redirect('home')
 
 
