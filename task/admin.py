@@ -20,6 +20,9 @@ class TaskAdmin(SummernoteModelAdmin):
     # Date-based navigation
     date_hierarchy = 'created_on'
     
+    # Enable actions, including delete selected
+    actions = ['delete_selected']
+    
     # Fields that cannot be edited
     readonly_fields = ('created_on',)
     
@@ -38,3 +41,18 @@ class TaskAdmin(SummernoteModelAdmin):
             'fields': ('status', 'created_on', 'finished_on')
         }),
     )
+    
+    def delete_selected(self, request, queryset):
+        """Custom delete action with additional confirmation"""
+        deleted_count = queryset.count()
+        for obj in queryset:
+            obj.delete()
+        
+        if deleted_count == 1:
+            message = "1 task was successfully deleted."
+        else:
+            message = f"{deleted_count} tasks were successfully deleted."
+        
+        self.message_user(request, message)
+    
+    delete_selected.short_description = "Delete selected tasks"
