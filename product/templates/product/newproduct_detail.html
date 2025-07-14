@@ -51,6 +51,11 @@
                                                     </div>
                                                     <div>
                                                         <span class="fw-bold">£{{ price.price }}</span>
+                                                        {% if price.percentage_above_min == 0 %}
+                                                            <span class="text-success ms-1 small">Mejor precio</span>
+                                                        {% else %}
+                                                            <span class="text-danger ms-1 small">+{{ price.percentage_above_min }}%</span>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </a>
@@ -66,6 +71,11 @@
                                                     </div>
                                                     <div>
                                                         <span class="fw-bold">£{{ price.price }}</span>
+                                                        {% if price.percentage_above_min == 0 %}
+                                                            <span class="text-success ms-1 small">Mejor precio</span>
+                                                        {% else %}
+                                                            <span class="text-danger ms-1 small">+{{ price.percentage_above_min }}%</span>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </a>

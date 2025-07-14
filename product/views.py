@@ -21,12 +21,23 @@ class ProductList(generic.ListView):
 
 
 def product_detail(request, slug):
-    product_prices = get_list_or_404(ProductPrice.objects.select_related('store', 'product'), product__slug=slug)
+    product_prices = get_list_or_404(
+        ProductPrice.objects.select_related('store', 'product').order_by('price'), 
+        product__slug=slug
+    )
     product = product_prices[0].product if product_prices else None
 
     prices = [p.price for p in product_prices]
     min_price = min(prices) if prices else None
     max_price = max(prices) if prices else None
+    
+    # Calculate percentage above minimum price for each product price
+    if min_price:
+        for price in product_prices:
+            if price.price == min_price:
+                price.percentage_above_min = 0
+            else:
+                price.percentage_above_min = int(round(((price.price - min_price) / min_price) * 100))
 
     return render(
         request,
