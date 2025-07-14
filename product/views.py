@@ -1,6 +1,9 @@
-from django.shortcuts import render,  get_list_or_404, get_object_or_404
+from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.views import generic
-from .models import ProductPrice
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import ProductPrice, Product
+from perfil.models import SavedProduct
 
 # Create your views here.
 
@@ -38,6 +41,13 @@ def product_detail(request, slug):
                 price.percentage_above_min = 0
             else:
                 price.percentage_above_min = int(round(((price.price - min_price) / min_price) * 100))
+    
+    # Verificar si el usuario ha guardado este producto
+    is_saved = False
+    can_save_more = True
+    if request.user.is_authenticated:
+        is_saved = SavedProduct.objects.filter(user=request.user, product=product).exists()
+        can_save_more = request.user.perfil.can_save_more_products()
 
     return render(
         request,
@@ -47,5 +57,36 @@ def product_detail(request, slug):
             "product_prices": product_prices,
             "min_price": min_price,
             "max_price": max_price,
+            "is_saved": is_saved,
+            "can_save_more": can_save_more,
         },
     )
+
+@login_required
+def save_product(request, product_id):
+    if request.method == 'POST':
+        # Verificar si el usuario puede guardar más productos
+        if not request.user.perfil.can_save_more_products():
+            messages.error(
+                request, 
+                f"Has alcanzado el límite de productos guardados para tu plan ({request.user.perfil.plan.name}). "
+                f"Actualiza a un plan superior para guardar más productos."
+            )
+            return redirect('product_detail', slug=request.POST.get('product_slug'))
+            
+        # Continuar con el proceso de guardar el producto
+        product = get_object_or_404(Product, pk=product_id)
+        saved_product, created = SavedProduct.objects.get_or_create(
+            user=request.user,
+            product=product
+        )
+        
+        if created:
+            messages.success(request, "Producto guardado correctamente.")
+        else:
+            messages.info(request, "Este producto ya estaba en tu lista.")
+            
+        return redirect('product_detail', slug=product.slug)
+    
+    # Si no es POST, redirigir a la página del producto
+    return redirect('home')

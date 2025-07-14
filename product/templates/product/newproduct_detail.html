@@ -131,4 +131,34 @@
     </div>
   </div>
 </div>
+
+{% if user.is_authenticated %}
+    {% if is_saved %}
+        <button class="btn btn-sm btn-success mb-3" disabled>
+            <i class="fas fa-bookmark mr-1"></i> Producto guardado
+        </button>
+    {% else %}
+        {% if can_save_more %}
+            <form method="post" action="{% url 'save_product' product.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_slug" value="{{ product.slug }}">
+                <button type="submit" class="btn btn-sm btn-outline-primary mb-3">
+                    <i class="far fa-bookmark mr-1"></i> Guardar producto
+                </button>
+            </form>
+        {% else %}
+            <button class="btn btn-sm btn-outline-secondary mb-3" disabled>
+                <i class="far fa-bookmark mr-1"></i> Límite alcanzado
+            </button>
+            <div class="small text-danger">
+                Has alcanzado el límite de productos guardados para tu plan.
+                <a href="{% url 'perfil' %}">Actualiza tu plan</a> para guardar más productos.
+            </div>
+        {% endif %}
+    {% endif %}
+{% else %}
+    <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-sm btn-outline-primary mb-3">
+        <i class="far fa-bookmark mr-1"></i> Iniciar sesión para guardar
+    </a>
+{% endif %}
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "newbase.html" %}
 {% load static %}
+{% load perfil_extras %}
 {% block Content %}
 <div class="container container-fluid">
     <div class="row">
@@ -32,6 +33,26 @@
         <!-- Main content -->
         <div class="col-md-9 p-4">
             <h2 class="fw-bold mb-4">Productos guardados</h2>
+            {% if user.perfil.plan %}
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span>Plan: <strong>{{ user.perfil.plan.name }}</strong></span>
+                    <span class="badge bg-primary">{{ user.perfil.saved_products_count }} /
+                        {{ user.perfil.plan.product_limit }}</span>
+                </div>
+                <div class="progress" style="height: 10px;">
+                    {% with saved_count=user.perfil.saved_products_count limit=user.perfil.plan.product_limit %}
+                    {% if limit > 0 %}
+                    <div class="progress-bar bg-primary" role="progressbar"
+                        style="width: {{ saved_count|floatformat:0|multiply:100|divide:limit }}%;"
+                        aria-valuenow="{{ saved_count }}" aria-valuemin="0" aria-valuemax="{{ limit }}">
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <small class="text-muted">Productos guardados de tu límite permitido</small>
+            </div>
+            {% endif %}
             <div id="savedProductCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% for saved in saved_products %}
