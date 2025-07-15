@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from product.models import Product
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from perfil.models import SavedProduct
+from product.models import ProductPrice
 
 
 class Task(models.Model):
@@ -52,8 +54,7 @@ class Task(models.Model):
 @receiver(post_save, sender=Task)
 def task_post_save(sender, instance, created, **kwargs):
     if created:
-        from product.models import ProductPrice
-        from perfil.models import SavedProduct
+        
 
         # First, check if user can save more products
         perfil = getattr(instance.user, 'perfil', None)
