@@ -29,6 +29,11 @@ class PerfilView(LoginRequiredMixin, TemplateView):
             saved.min_price = min_price
         context['saved_products'] = saved_products
         context['product_alerts'] = ProductAlert.objects.select_related('product').filter(user=user)
+        # Agrega can_save_more al contexto
+        can_save_more = True
+        if user.is_authenticated and hasattr(user, 'perfil'):
+            can_save_more = user.perfil.can_save_more_products()
+        context['can_save_more'] = can_save_more
         return context
         
     def post(self, request, *args, **kwargs):
@@ -53,6 +58,11 @@ class AccountSettingsView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        can_save_more = True
+        if user.is_authenticated and hasattr(user, 'perfil'):
+            can_save_more = user.perfil.can_save_more_products()
+        context['can_save_more'] = can_save_more
         # Add any additional context needed for the account settings page
         return context
     

@@ -41,10 +41,39 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        perfil = getattr(self.user, 'perfil', None)
+        if perfil and not perfil.can_save_more_products():
+            # Prevent saving if user cannot save more products
+            return
+        super().save(*args, **kwargs)
+
 # Signal to trigger Celery task when a Task instance is created
 @receiver(post_save, sender=Task)
 def task_post_save(sender, instance, created, **kwargs):
-    if created:  # Only when a new Task is created
-        from task.tasks import process_task
-        # Enqueue the Celery task with both task ID and URL
-        process_task.delay(instance.id, instance.url)
+    if created:
+        from product.models import ProductPrice
+        from perfil.models import SavedProduct
+
+        # First, check if user can save more products
+        perfil = getattr(instance.user, 'perfil', None)
+        if perfil and perfil.can_save_more_products():
+            # Then, check if the URL exists in ProductPrice.link
+            price_entry = ProductPrice.objects.filter(link=instance.url).select_related('product').first()
+            if price_entry:
+                # Mark task as completed
+                instance.status = 'completed'
+                instance.product = price_entry.product
+                instance.save(update_fields=['status', 'product'])
+
+                SavedProduct.objects.get_or_create(
+                    user=instance.user,
+                    product=price_entry.product
+                )
+            else:
+                # Enqueue the Celery task with both task ID and URL
+                from task.tasks import process_task
+                process_task.delay(instance.id, instance.url)
+        else:
+            # Optionally, handle the case when user cannot save more products
+            pass

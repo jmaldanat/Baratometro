@@ -15,3 +15,10 @@ def divide(value, arg):
         return float(value) / float(arg)
     except (ValueError, TypeError, ZeroDivisionError):
         return 0
+
+@register.simple_tag(takes_context=True)
+def can_save_more(context):
+    user = context['user']
+    if user.is_authenticated and hasattr(user, 'perfil'):
+        return user.perfil.can_save_more_products()
+    return False

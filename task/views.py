@@ -18,6 +18,11 @@ class TaskView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         # Get all tasks for the current user
         context['tasks'] = Task.objects.filter(user=user).order_by('-created_on')
+        # Agrega can_save_more al contexto
+        can_save_more = True
+        if user.is_authenticated and hasattr(user, 'perfil'):
+            can_save_more = user.perfil.can_save_more_products()
+        context['can_save_more'] = can_save_more
         return context
 
 @login_required

@@ -57,6 +57,14 @@ class ProductList(generic.ListView):
             
         context['productprice_list'] = productprice_list
         context['is_popular_list'] = True  # Flag to indicate this is the popular products list
+
+        # Añadir can_save_more al contexto
+        can_save_more = True
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'perfil'):
+            can_save_more = user.perfil.can_save_more_products()
+        context['can_save_more'] = can_save_more
+
         return context
 
 

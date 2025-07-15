@@ -5,6 +5,7 @@
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
+{% load perfil_extras %}
 
 <!DOCTYPE html>
 <html class="h-100" lang="en">
@@ -73,13 +74,19 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                 </ul>
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and can_save_more %}
                 <form class="d-flex ms-auto" action="{% url 'create_task_from_url' %}" method="post">
                     {% csrf_token %}
                     <input class="form-control me-2" type="url" name="search_url" placeholder="Enter product URL"
                         aria-label="Search URL" required>
                     <button class="btn btn-outline-success" type="submit">Track</button>
                 </form>
+                {% elif user.is_authenticated %}
+                <div class="ms-auto">
+                    <button class="btn btn-outline-secondary" disabled>
+                        <small>Límite de productos guardados alcanzado</small>
+                    </button>
+                </div>
                 {% else %}
                 <div class="ms-auto">
                     <a href="{% url 'account_login' %}?next={% url 'home' %}" class="btn btn-outline-secondary">
