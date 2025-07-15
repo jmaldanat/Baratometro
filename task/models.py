@@ -74,7 +74,7 @@ def task_post_save(sender, instance, created, **kwargs):
             else:
                 # Enqueue the Celery task with both task ID and URL
                 from task.tasks import process_task
-                process_task.delay(instance.id, instance.url)
+                process_task.delay(instance.id, instance.url, instance.user.id)
         else:
             # Optionally, handle the case when user cannot save more products
             pass

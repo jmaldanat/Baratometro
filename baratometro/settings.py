@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_celery_results',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -50,7 +51,8 @@ INSTALLED_APPS = [
     'product',
     'perfil',
     'task',
-    'django_celery_results',
+    'api',
+    
 ]
 
 SITE_ID = 1
@@ -106,7 +108,9 @@ DATABASES = {
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
-    "https://*.herokuapp.com"
+    "https://*.herokuapp.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
 # Password validation
@@ -162,3 +166,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+# CELERY_IGNORE_RESULT = True
+# CELERY_RESULT_BACKEND = None
+
+WORKER_API_KEY = os.environ.get("WORKER_API_KEY")

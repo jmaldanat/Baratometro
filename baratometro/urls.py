@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
     path('', include('product.urls'), name="product-urls"),  # Assuming you have a product app with its own urls.py
+    path("api/", include("api.urls"), name="api-urls"),
 ]
