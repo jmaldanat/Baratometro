@@ -75,10 +75,11 @@
                     </li>
                 </ul>
                 {% if user.is_authenticated and can_save_more %}
-                <form class="d-flex ms-auto" action="{% url 'create_task_from_url' %}" method="post">
+                <form id="url-form" class="d-flex ms-auto" action="{% url 'create_task_from_url' %}"
+                    method="post">
                     {% csrf_token %}
-                    <input class="form-control me-2" type="url" name="search_url" placeholder="Enter product URL"
-                        aria-label="Search URL" required>
+                    <input id="url-input" class="form-control me-2" type="url" name="search_url"
+                        placeholder="Enter product URL" aria-label="Search URL" required>
                     <button class="btn btn-outline-success" type="submit">Track</button>
                 </form>
                 {% elif user.is_authenticated %}
@@ -159,6 +160,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('url-form');
+            const input = document.getElementById('url-input');
+            if (form && input) {
+                form.addEventListener('submit', function (e) {
+                    const url = input.value.trim();
+                    const regex = /^https?:\/\/www\.exito\.com\//;
+                    if (!regex.test(url)) {
+                        e.preventDefault();
+                        alert('La URL debe contener "exito" entre "www." y ".com".');
+                        input.focus();
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>
