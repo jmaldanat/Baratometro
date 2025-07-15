@@ -37,8 +37,15 @@ class ProductAdmin(admin.ModelAdmin):
     saved_by_count.admin_order_field = 'saved_count'
     saved_by_count.short_description = 'Saved by Users'
 
+
+
+class StoreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'logo_url')
+    search_fields = ('name',)
+    list_filter = ()
+
 # Register your models here.
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Store)
+admin.site.register(Store, StoreAdmin)
 admin.site.register(ProductPriceStatus)
 admin.site.register(PriceHistory)

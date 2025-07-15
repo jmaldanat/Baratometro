@@ -9,7 +9,7 @@ class TaskAdmin(SummernoteModelAdmin):
     summernote_fields = ('content',)
     
     # Fields to display in the list view
-    list_display = ('title', 'user', 'product', 'status', 'created_on', 'finished_on')
+    list_display = ('id','title', 'user', 'product', 'status', 'created_on', 'finished_on')
     
     # Filters in the right sidebar
     list_filter = ('status', 'user', 'product', 'created_on', 'finished_on')
