@@ -20,42 +20,72 @@
             {% if tasks %}
                 <div class="list-group">
                     {% for task in tasks %}
-                    <div class="list-group-item {% if task.status == 'completed' %}bg-light{% endif %} mb-2 rounded shadow-sm">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
-                            <div class="flex-grow-1 w-100">
-                                <div class="d-flex flex-wrap align-items-center mb-2 w-100">
-                                    <h5 class="fw-bold mb-0 {% if task.status == 'completed' %}text-muted{% endif %} text-truncate" style="max-width: 60%;">
-                                        {{ task.title }}
-                                    </h5>
-                                    {% if task.status == 'pending' %}
-                                    <span class="badge bg-secondary ms-2 flex-shrink-0 mb-1 mb-md-0">Pending</span>
-                                    {% elif task.status == 'in_progress' %}
-                                    <span class="badge bg-warning ms-2 flex-shrink-0 mb-1 mb-md-0">In Progress</span>
-                                    {% elif task.status == 'completed' %}
-                                    <span class="badge bg-success ms-2 flex-shrink-0 mb-1 mb-md-0">Completed</span>
-                                    {% elif task.status == 'failed' %}
-                                    <span class="badge bg-danger ms-2 flex-shrink-0 mb-1 mb-md-0">Failed</span>
-                                    {% endif %}
-                                    {% if task.url %}
-                                    <a href="{{ task.url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2 flex-shrink-0 text-truncate mb-1 mb-md-0" style="max-width: 30%;">
-                                        <i class="bi bi-link"></i> Visit Link
-                                    </a>
-                                    {% endif %}
+                        {% if task.status == 'completed' %}
+                            <a href="{% url 'perfil' %}" class="list-group-item d-block text-decoration-none bg-success bg-opacity-10 mb-2 rounded shadow-sm">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                    <div class="flex-grow-1 w-100">
+                                        <div class="d-flex flex-wrap align-items-center mb-2 w-100">
+                                            <h5 class="fw-bold mb-0 text-muted text-truncate" style="max-width: 60%;">
+                                                {{ task.title }}
+                                            </h5>
+                                            <span class="badge bg-success ms-2 flex-shrink-0 mb-1 mb-md-0">Completed</span>
+                                            {% if task.url %}
+                                            <span class="btn btn-sm btn-outline-primary ms-2 flex-shrink-0 text-truncate mb-1 mb-md-0" style="max-width: 30%;">
+                                                <i class="bi bi-link"></i> Visit Link
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="mb-1 text-muted">{{ task.content }}</p>
+                                        <div class="small text-muted mb-2">
+                                            {% if task.product %}
+                                            <span class="me-3">Product: {{ task.product }}</span>
+                                            {% endif %}
+                                            <span class="me-3">Created: {{ task.created_on|date:"M d, Y" }}</span>
+                                            {% if task.finished_on %}
+                                            <span>Completed: {{ task.finished_on|date:"M d, Y" }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                                <p class="mb-1 {% if task.status == 'completed' %}text-muted{% endif %}">{{ task.content }}</p>
-                                <div class="small text-muted mb-2">
-                                    {% if task.product %}
-                                    <span class="me-3">Product: {{ task.product }}</span>
-                                    {% endif %}
-                                    <span class="me-3">Created: {{ task.created_on|date:"M d, Y" }}</span>
-                                    {% if task.finished_on %}
-                                    <span>Completed: {{ task.finished_on|date:"M d, Y" }}</span>
-                                    {% endif %}
+                            </a>
+                        {% else %}
+                            <div class="list-group-item d-block text-decoration-none 
+                                {% if task.status == 'failed' %}bg-danger bg-opacity-10
+                                {% else %}bg-white
+                                {% endif %} mb-2 rounded shadow-sm">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                    <div class="flex-grow-1 w-100">
+                                        <div class="d-flex flex-wrap align-items-center mb-2 w-100">
+                                            <h5 class="fw-bold mb-0 {% if task.status == 'completed' %}text-muted{% endif %} text-truncate" style="max-width: 60%;">
+                                                {{ task.title }}
+                                            </h5>
+                                            {% if task.status == 'pending' %}
+                                            <span class="badge bg-secondary ms-2 flex-shrink-0 mb-1 mb-md-0">Pending</span>
+                                            {% elif task.status == 'in_progress' %}
+                                            <span class="badge bg-warning ms-2 flex-shrink-0 mb-1 mb-md-0">In Progress</span>
+                                            {% elif task.status == 'failed' %}
+                                            <span class="badge bg-danger ms-2 flex-shrink-0 mb-1 mb-md-0">Failed</span>
+                                            {% endif %}
+                                            {% if task.url %}
+                                            <span class="btn btn-sm btn-outline-primary ms-2 flex-shrink-0 text-truncate mb-1 mb-md-0" style="max-width: 30%;">
+                                                <i class="bi bi-link"></i> Visit Link
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="mb-1">{{ task.content }}</p>
+                                        <div class="small text-muted mb-2">
+                                            {% if task.product %}
+                                            <span class="me-3">Product: {{ task.product }}</span>
+                                            {% endif %}
+                                            <span class="me-3">Created: {{ task.created_on|date:"M d, Y" }}</span>
+                                            {% if task.finished_on %}
+                                            <span>Completed: {{ task.finished_on|date:"M d, Y" }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                                
                             </div>
-                        </div>
-                    </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% else %}
