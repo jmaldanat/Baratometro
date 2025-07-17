@@ -52,10 +52,3 @@ def create_task_from_url(request):
     
     # If not POST, redirect to home
     return redirect('home')
-
-@login_required
-def user_tasks_status(request):
-    tasks = Task.objects.filter(user=request.user).values('id', 'status')
-    return JsonResponse(list(tasks), safe=False)
-
-
