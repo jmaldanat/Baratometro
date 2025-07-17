@@ -164,7 +164,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('url-form');
             const input = document.getElementById('url-input');
-            if (form && input) {
+            const trackBtn = form ? form.querySelector('button[type="submit"]') : null;
+            if (form && input && trackBtn) {
                 form.addEventListener('submit', function (e) {
                     const url = input.value.trim();
                     const regex = /^https?:\/\/www\.exito\.com\//;
@@ -172,6 +173,11 @@
                         e.preventDefault();
                         alert('La URL debe contener "exito" entre "www." y ".com".');
                         input.focus();
+                    } else {
+                        trackBtn.disabled = true;
+                        setTimeout(function () {
+                            trackBtn.disabled = false;
+                        }, 2000);
                     }
                 });
             }
