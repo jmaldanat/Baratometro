@@ -7,7 +7,7 @@ import re
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 
 class TaskView(LoginRequiredMixin, TemplateView):
@@ -52,5 +52,10 @@ def create_task_from_url(request):
     
     # If not POST, redirect to home
     return redirect('home')
+
+@login_required
+def user_tasks_status(request):
+    tasks = Task.objects.filter(user=request.user).values('id', 'status')
+    return JsonResponse(list(tasks), safe=False)
 
 
