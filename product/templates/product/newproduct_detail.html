@@ -42,14 +42,13 @@
                 {% endif %}
                 {% if user.is_authenticated and is_saved %}
                     {% if has_alert and alert_id %}
-                        <button class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#deleteProductAlertModal">
-                            <i class="fas fa-heart mr-1"></i> Eliminar alerta
+                        <button type="button" class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#priceAlertModal">
+                            Editar alerta
                         </button>
                     {% else %}
-                        <form method="post" action="{% url 'create_product_alert' product.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-warning mb-3">Crear alerta</button>
-                        </form>
+                        <button type="button" class="btn btn-warning mb-3" data-bs-toggle="modal" data-bs-target="#priceAlertModal">
+                            Crear alerta
+                        </button>
                     {% endif %}
                 {% endif %}
             </div>
@@ -246,6 +245,200 @@
     </div>
 </div>
 
+<!-- Modal de alerta de precio -->
+<div class="modal fade" id="priceAlertModal" tabindex="-1" aria-labelledby="priceAlertModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="priceAlertModalLabel">Edit price alert</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Product info -->
+        <div class="d-flex align-items-center mb-3">
+          <img src="{{ product.image_url }}" class="rounded me-3" alt="Product" style="width:100px; height:auto;">
+          <div>
+            <div class="fw-semibold">{{ product.name }}</div>
+          </div>
+        </div>
+        <!-- Prices -->
+        <div class="d-flex justify-content-center mb-3 gap-5">
+          <div class="text-center">
+            <small class="text-muted">Starting price</small>
+            <div class="fw-bold fs-5">£{{ min_price }}</div>
+          </div>
+          <div class="text-center">
+            <small class="text-muted">Threshold</small>
+            <div class="fw-bold fs-5">£<span id="thresholdValue">{{ min_price|floatformat:2 }}</span></div>
+          </div>
+        </div>
+        <!-- Notify options -->
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="radio" name="alertOption" id="priceDropped" checked>
+          <label class="form-check-label" for="priceDropped">
+            Notify me when the price has dropped
+          </label>
+        </div>
+        <div id="priceDroppedInputContainer" class="mb-3">
+          <input type="number" class="form-control mt-2" id="priceDroppedInput" placeholder="Minimum price reduction per message (£)">
+          <div id="priceDroppedError" class="text-danger small mt-1" style="display:none;"></div>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="radio" name="alertOption" id="targetReached">
+          <label class="form-check-label" for="targetReached">
+            Notify me when my target price has been reached
+          </label>
+        </div>
+        <div id="targetReachedInputContainer" class="mb-3" style="display:none;">
+          <input type="number" class="form-control mt-2" id="targetReachedInput" placeholder="Target price (£)">
+          <div id="targetReachedError" class="text-danger small mt-1" style="display:none;"></div>
+        </div>
+      </div>
+      <form id="alertForm" method="post" action="{% url 'create_product_alert' product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="target_price" id="hiddenTargetPrice">
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-dark">{% if has_alert and alert_id %}Update{% else %}Create{% endif %}</button>
+        </div>
+      </form>
+      {% if has_alert and alert_id%}
+      <div class="text-center mb-3">
+        <button class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#deleteProductAlertModal">
+          Delete price alert
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const priceDroppedRadio = document.getElementById('priceDropped');
+    const targetReachedRadio = document.getElementById('targetReached');
+    const priceDroppedInputContainer = document.getElementById('priceDroppedInputContainer');
+    const targetReachedInputContainer = document.getElementById('targetReachedInputContainer');
+    const priceDroppedInput = document.getElementById('priceDroppedInput');
+    const targetReachedInput = document.getElementById('targetReachedInput');
+    const thresholdSpan = document.getElementById('thresholdValue');
+    const updateBtn = document.querySelector('#priceAlertModal .btn-dark');
+    const minPrice = parseFloat('{{ min_price }}');
+    const priceDroppedError = document.getElementById('priceDroppedError');
+    const targetReachedError = document.getElementById('targetReachedError');
+    const alertForm = document.getElementById('alertForm');
+    const hiddenTargetPrice = document.getElementById('hiddenTargetPrice');
+
+    function updateVisibility() {
+        if (priceDroppedRadio.checked) {
+            priceDroppedInputContainer.style.display = '';
+            targetReachedInputContainer.style.display = 'none';
+        } else if (targetReachedRadio.checked) {
+            priceDroppedInputContainer.style.display = 'none';
+            targetReachedInputContainer.style.display = '';
+        }
+        updateThreshold();
+    }
+
+    function updateThreshold() {
+        let threshold = 0;
+        priceDroppedError.style.display = 'none';
+        priceDroppedError.textContent = '';
+        priceDroppedError.classList.remove('fw-bold');
+        targetReachedError.style.display = 'none';
+        targetReachedError.textContent = '';
+        targetReachedError.classList.remove('fw-bold');
+
+        if (priceDroppedRadio.checked) {
+            const reduction = parseFloat(priceDroppedInput.value);
+            threshold = minPrice - (isNaN(reduction) ? 0 : reduction);
+            thresholdSpan.textContent = threshold > 0 ? threshold.toFixed(2) : '0.00';
+            if (isNaN(reduction) || reduction <= 0) {
+                priceDroppedError.textContent = 'Por favor ingresa una reducción válida mayor a 0.';
+                priceDroppedError.style.display = 'block';
+            } else if (threshold <= 0) {
+                priceDroppedError.textContent = 'La reducción no puede ser igual o mayor al precio actual.';
+                priceDroppedError.style.display = 'block';
+            }
+        } else if (targetReachedRadio.checked) {
+            const target = parseFloat(targetReachedInput.value);
+            threshold = isNaN(target) ? 0 : target;
+            thresholdSpan.textContent = threshold > 0 ? threshold.toFixed(2) : '0.00';
+            if (isNaN(target) || target <= 0) {
+                targetReachedError.textContent = 'Por favor ingresa un precio objetivo válido mayor a 0.';
+                targetReachedError.style.display = 'block';
+            } else if (target >= minPrice) {
+                targetReachedError.textContent = 'El precio objetivo no puede ser igual o mayor al precio actual.';
+                targetReachedError.style.display = 'block';
+            }
+        }
+    }
+
+    function getThresholdValue() {
+        if (priceDroppedRadio.checked) {
+            const reduction = parseFloat(priceDroppedInput.value);
+            return minPrice - (isNaN(reduction) ? 0 : reduction);
+        } else if (targetReachedRadio.checked) {
+            const target = parseFloat(targetReachedInput.value);
+            return isNaN(target) ? 0 : target;
+        }
+        return 0;
+    }
+
+    priceDroppedRadio.addEventListener('change', updateVisibility);
+    targetReachedRadio.addEventListener('change', updateVisibility);
+    priceDroppedInput.addEventListener('input', updateThreshold);
+    targetReachedInput.addEventListener('input', updateThreshold);
+
+    alertForm.addEventListener('submit', function(e) {
+        let hasError = false;
+        let threshold = getThresholdValue();
+
+        priceDroppedError.classList.remove('fw-bold');
+        targetReachedError.classList.remove('fw-bold');
+
+        if (priceDroppedRadio.checked) {
+            const reduction = parseFloat(priceDroppedInput.value);
+            if (isNaN(reduction) || reduction <= 0) {
+                priceDroppedError.textContent = 'Por favor ingresa una reducción válida mayor a 0.';
+                priceDroppedError.style.display = 'block';
+                priceDroppedError.classList.add('fw-bold');
+                setTimeout(() => priceDroppedError.classList.remove('fw-bold'), 100);
+                hasError = true;
+            } else if (threshold <= 0) {
+                priceDroppedError.textContent = 'La reducción no puede ser igual o mayor al precio actual.';
+                priceDroppedError.style.display = 'block';
+                priceDroppedError.classList.add('fw-bold');
+                setTimeout(() => priceDroppedError.classList.remove('fw-bold'), 100);
+                hasError = true;
+            }
+        } else if (targetReachedRadio.checked) {
+            const target = parseFloat(targetReachedInput.value);
+            if (isNaN(target) || target <= 0) {
+                targetReachedError.textContent = 'Por favor ingresa un precio objetivo válido mayor a 0.';
+                targetReachedError.style.display = 'block';
+                targetReachedError.classList.add('fw-bold');
+                setTimeout(() => targetReachedError.classList.remove('fw-bold'), 100);
+                hasError = true;
+            } else if (target >= minPrice) {
+                targetReachedError.textContent = 'El precio objetivo no puede ser igual o mayor al precio actual.';
+                targetReachedError.style.display = 'block';
+                targetReachedError.classList.add('fw-bold');
+                setTimeout(() => targetReachedError.classList.remove('fw-bold'), 100);
+                hasError = true;
+            }
+        }
+
+        if (hasError) {
+            e.preventDefault();
+            return;
+        }
+
+        hiddenTargetPrice.value = threshold.toFixed(2);
+    });
+
+    updateVisibility();
+});
+</script>
 
 {% endblock %}

@@ -168,16 +168,26 @@ def create_product_alert(request, product_id):
         return redirect('product_detail', slug=product.slug)
 
     if request.method == 'POST':
+        target_price = request.POST.get('target_price')
         channels = request.POST.get('channels', '')
         message = request.POST.get('message', '')
-        ProductAlert.objects.create(
-            user=request.user,
-            product=product,
-            saved_product=saved_product,
-            channels=channels,
-            message=message
-        )
-        messages.success(request, "Alerta creada correctamente.")
+        alert = ProductAlert.objects.filter(user=request.user, saved_product=saved_product).first()
+        if alert:
+            alert.target_price = target_price
+            alert.channels = channels
+            alert.message = message
+            alert.save()
+            messages.success(request, "Alerta actualizada correctamente.")
+        else:
+            ProductAlert.objects.create(
+                user=request.user,
+                product=product,
+                saved_product=saved_product,
+                target_price=target_price,
+                channels=channels,
+                message=message
+            )
+            messages.success(request, "Alerta creada correctamente.")
         return redirect('product_detail', slug=product.slug)
 
     return render(request, 'product/create_alert.html', {
