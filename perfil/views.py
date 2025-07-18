@@ -110,3 +110,14 @@ class DeleteAccountView(LoginRequiredMixin, FormView):
     def form_invalid(self, form):
         messages.error(self.request, "Account deletion failed. Please try again.")
         return redirect('profile_account')
+
+class AlertsView(LoginRequiredMixin, TemplateView):
+    template_name = 'perfil/alerts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        # Obtén todas las alertas de productos del usuario
+        product_alerts = ProductAlert.objects.select_related('product').filter(user=user)
+        context['product_alerts'] = product_alerts
+        return context

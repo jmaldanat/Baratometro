@@ -1,0 +1,185 @@
+{% extends "newbase.html" %}
+{% load static %}
+{% load perfil_extras %}
+{% block Content %}
+{% url 'account_logout' as logout_url %}
+
+<div class="container container-fluid">
+    <div class="row">
+        <!-- Sidebar con diseño mejorado -->
+        <div class="col-md-3 sidebar p-3 bg-white border-end h-100">
+            <div class="profile-circle circle-base mx-auto my-3">{{ user.username|first|upper }}</div>
+            <h5 class="text-center mb-4">{{ user.username }}</h5>
+            <!-- Sidebar with collapse for responsive views -->
+            <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
+                Menu
+            </button>
+            <div class="collapse d-md-block" id="sidebarMenu">
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perfil' %}"><i class="fas fa-list me-2"></i>My Lists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alerts' %}"><i class="fas fa-bell me-2"></i>Price Alerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'profile_account' %}"><i
+                                class="fas fa-cog me-2"></i>Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="{{ logout_url }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Log out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Main content -->
+        <div class="col-md-9 p-4">
+            <h3 class="mb-4">Price Alerts</h3>
+            <!-- Carrusel para desktop/tablet -->
+            <div class="d-none d-sm-block">
+                <div id="alertsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for alert in product_alerts %}
+                            {% if forloop.counter0|divisibleby:5 %}
+                            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless align-middle mb-0">
+                                        <thead class="small text-uppercase text-muted border-bottom">
+                                            <tr>
+                                                <th>Product</th>
+                                                <th class="text-end">Last updated</th>
+                                                <th class="text-end">Starting price</th>
+                                                <th class="text-end">Price now</th>
+                                                <th class="text-end">Threshold</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                            {% endif %}
+                                        <tr class="border-bottom">
+                                            <td class="d-flex align-items-center">
+                                                <img src="{{ alert.product.image_url }}" class="me-3 rounded" alt="{{ alert.product.name }}"
+                                                    style="width: 80px; height: auto; object-fit: cover;">
+                                                <span>{{ alert.product.name }}</span>
+                                            </td>
+                                            <td class="text-end">{{ alert.created_at|date:"d F Y" }}</td>
+                                            <td class="text-end">£{{ alert.product.prices.first.price }}</td>
+                                            <td class="text-end">£{{ alert.min_price_now }}</td>
+                                            <td class="text-end">£{{ alert.target_price }}</td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-h"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#editPriceAlertModal">Edit</a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                                                data-bs-target="#deletePriceAlertModal">Remove</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                            {% if forloop.counter|divisibleby:5 or forloop.last %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                        <div class="carousel-item active">
+                            <div class="table-responsive">
+                                <table class="table table-borderless align-middle mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">No price alerts yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if product_alerts and product_alerts|length > 5 %}
+                    <button class="carousel-control-prev custom-carousel-btn" type="button"
+                        data-bs-target="#alertsCarousel" data-bs-slide="prev">
+                        <span class="custom-arrow">&lt;</span>
+                    </button>
+                    <button class="carousel-control-next custom-carousel-btn" type="button"
+                        data-bs-target="#alertsCarousel" data-bs-slide="next">
+                        <span class="custom-arrow">&gt;</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Cards para móviles -->
+            <div class="d-block d-sm-none">
+                <div class="row row-cols-1 g-3">
+                    {% for alert in product_alerts %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex">
+                                        <img src="{{ alert.product.image_url }}" class="me-3 rounded" style="width: 70px; height: auto; object-fit: cover;" alt="{{ alert.product.name }}">
+                                        <div>
+                                            <h5 class="card-title mb-1">{{ alert.product.name|truncatechars:30 }}</h5>
+                                            <small class="text-muted">Created {{ alert.created_at|date:"d F Y" }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editPriceAlertModal">Edit</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deletePriceAlertModal">Remove</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <small>Starting price</small><br>
+                                            <strong>£{{ alert.product.prices.first.price }}</strong>
+                                        </div>
+                                        <div>
+                                            <small>Price now</small><br>
+                                            <strong>£{{ alert.min_price_now }}</strong>
+                                        </div>
+                                        <div>
+                                            <small>Threshold</small><br>
+                                            <strong>£{{ alert.target_price }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body text-center text-muted py-5">
+                                No price alerts yet.
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

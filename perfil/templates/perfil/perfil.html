@@ -18,13 +18,14 @@
             <div class="collapse d-md-block" id="sidebarMenu">
                 <ul class="nav flex-column mt-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-list me-2"></i>My Lists</a>
+                        <a class="nav-link" href="{% url 'perfil' %}"><i class="fas fa-list me-2"></i>My Lists</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-bell me-2"></i>Price Alerts</a>
+                        <a class="nav-link" href="{% url 'alerts' %}"><i class="fas fa-bell me-2"></i>Price Alerts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile_account' %}"><i class="fas fa-cog me-2"></i>Settings</a>
+                        <a class="nav-link active" href="{% url 'profile_account' %}"><i
+                                class="fas fa-cog me-2"></i>Settings</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="{{ logout_url }}">
