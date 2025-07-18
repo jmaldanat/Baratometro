@@ -22,10 +22,10 @@ class ProductAdmin(admin.ModelAdmin):
     """
     Admin configuration for the Product model.
     """
-    list_display = ('name', 'ean', 'category', 'created_on', 'saved_by_count')
+    list_display = ('name', 'ean', 'category', 'created_on', 'saved_by_count','lowest_price_now', 'highest_price_now')
     search_fields = ('name', 'ean', 'category')
     list_filter = ('category', 'created_on',)
-    readonly_fields = ('saved_by_count',)
+    readonly_fields = ('saved_by_count','lowest_price_now', 'highest_price_now')
     
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

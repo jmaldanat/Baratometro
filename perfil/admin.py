@@ -18,7 +18,7 @@ class SavedProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductAlert)
 class ProductAlertAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'channels', 'active', 'created_at')
+    list_display = ('user', 'product', 'channels', 'active', 'created_at','target_price','min_price_now','store_with_min_price')
     list_filter = ('active', 'channels')
     search_fields = ('user__username', 'product__name')
 

@@ -37,6 +37,16 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def lowest_price_now(self):
+        prices = self.prices.values_list('price', flat=True)
+        return min(prices) if prices else None
+
+    @property
+    def highest_price_now(self):
+        prices = self.prices.values_list('price', flat=True)
+        return max(prices) if prices else None
+
 class Store(models.Model):
     name = models.CharField(max_length=255)
     logo_url = models.URLField(blank=True, null=True)

@@ -62,6 +62,7 @@ class ProductAlert(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
     message = models.CharField(max_length=255, blank=True)
+    target_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Nuevo campo
 
     class Meta:
         constraints = [
@@ -70,6 +71,16 @@ class ProductAlert(models.Model):
 
     def get_channels_list(self):
         return [c for c in self.channels.split(',') if c]
+
+    @property
+    def min_price_now(self):
+        prices = self.product.prices.values_list('price', flat=True)
+        return min(prices) if prices else None
+
+    @property
+    def store_with_min_price(self):
+        min_price_obj = self.product.prices.order_by('price').first()
+        return min_price_obj.store if min_price_obj else None
 
     def __str__(self):
         return f"Alert for {self.product.name} to {self.user} via {self.channels}"
