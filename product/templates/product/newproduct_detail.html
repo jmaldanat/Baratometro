@@ -40,6 +40,18 @@
                         <i class="far fa-heart mr-1"></i> Iniciar sesión para guardar
                     </a>
                 {% endif %}
+                {% if user.is_authenticated and is_saved %}
+                    {% if has_alert and alert_id %}
+                        <button class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#deleteProductAlertModal">
+                            <i class="fas fa-heart mr-1"></i> Eliminar alerta
+                        </button>
+                    {% else %}
+                        <form method="post" action="{% url 'create_product_alert' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning mb-3">Crear alerta</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
             </div>
 
             <!-- Right: product info -->
@@ -189,6 +201,32 @@
     </div>
 </div>
 
+<!-- Modal de eliminar alerta de producto -->
+{% if has_alert and alert_id %}
+<div class="modal fade" id="deleteProductAlertModal" tabindex="-1" aria-labelledby="deleteProductAlertModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductAlertModalLabel">Eliminar alerta de producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Seguro que quieres eliminar la alerta de este producto? Puedes volver a crearla cuando quieras.</p>
+                <form id="deleteProductAlertForm" method="post" action="{% url 'delete_product_alert' alert_id %}">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-secondary w-45"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark w-45">Eliminar alerta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Modal de límite alcanzado -->
 <div class="modal fade" id="limitReachedModal" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -208,26 +246,6 @@
     </div>
 </div>
 
-{% if user.is_authenticated and is_saved %}
-    {% if has_alert %}
-        <form method="post" action="{% url 'delete_product_alert' alert_id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Eliminar alerta</button>
-        </form>
-    {% else %}
-        <form method="post" action="{% url 'create_product_alert' product.id %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="channels" class="form-label">Canales de alerta (separados por coma)</label>
-                <input type="text" class="form-control" id="channels" name="channels" placeholder="email,sms">
-            </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Mensaje de alerta</label>
-                <input type="text" class="form-control" id="message" name="message" placeholder="Mensaje opcional">
-            </div>
-            <button type="submit" class="btn btn-warning">Crear alerta</button>
-        </form>
-    {% endif %}
-{% endif %}
+
 
 {% endblock %}
