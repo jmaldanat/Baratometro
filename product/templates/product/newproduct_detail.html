@@ -207,4 +207,27 @@
         </div>
     </div>
 </div>
+
+{% if user.is_authenticated and is_saved %}
+    {% if has_alert %}
+        <form method="post" action="{% url 'delete_product_alert' alert_id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar alerta</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'create_product_alert' product.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="channels" class="form-label">Canales de alerta (separados por coma)</label>
+                <input type="text" class="form-control" id="channels" name="channels" placeholder="email,sms">
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Mensaje de alerta</label>
+                <input type="text" class="form-control" id="message" name="message" placeholder="Mensaje opcional">
+            </div>
+            <button type="submit" class="btn btn-warning">Crear alerta</button>
+        </form>
+    {% endif %}
+{% endif %}
+
 {% endblock %}

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import ProductPrice, Product
-from perfil.models import SavedProduct
+from perfil.models import SavedProduct, ProductAlert
 
 # Create your views here.
 
@@ -90,9 +90,17 @@ def product_detail(request, slug):
     # Verificar si el usuario ha guardado este producto
     is_saved = False
     can_save_more = True
+    has_alert = False
+    alert_id = None
     if request.user.is_authenticated:
         is_saved = SavedProduct.objects.filter(user=request.user, product=product).exists()
         can_save_more = request.user.perfil.can_save_more_products()
+        if is_saved:
+            saved_product = SavedProduct.objects.get(user=request.user, product=product)
+            alert = ProductAlert.objects.filter(user=request.user, saved_product=saved_product).first()
+            if alert:
+                has_alert = True
+                alert_id = alert.id
 
     return render(
         request,
@@ -104,6 +112,8 @@ def product_detail(request, slug):
             "max_price": max_price,
             "is_saved": is_saved,
             "can_save_more": can_save_more,
+            "has_alert": has_alert,
+            "alert_id": alert_id,
         },
     )
 
@@ -147,3 +157,38 @@ def unsave_product(request, product_id):
             messages.error(request, "No se encontró el producto en tu lista.")
         return redirect('product_detail', slug=request.POST.get('product_slug'))
     return redirect('home')
+
+@login_required
+def create_product_alert(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    try:
+        saved_product = SavedProduct.objects.get(user=request.user, product=product)
+    except SavedProduct.DoesNotExist:
+        messages.error(request, "Debes guardar el producto antes de crear una alerta.")
+        return redirect('product_detail', slug=product.slug)
+
+    if request.method == 'POST':
+        channels = request.POST.get('channels', '')
+        message = request.POST.get('message', '')
+        ProductAlert.objects.create(
+            user=request.user,
+            product=product,
+            saved_product=saved_product,
+            channels=channels,
+            message=message
+        )
+        messages.success(request, "Alerta creada correctamente.")
+        return redirect('product_detail', slug=product.slug)
+
+    return render(request, 'product/create_alert.html', {
+        'product': product,
+        'saved_product': saved_product
+    })
+
+@login_required
+def delete_product_alert(request, alert_id):
+    alert = get_object_or_404(ProductAlert, id=alert_id, user=request.user)
+    product_slug = alert.product.slug
+    alert.delete()
+    messages.success(request, "Alerta eliminada correctamente.")
+    return redirect('product_detail', slug=product_slug)

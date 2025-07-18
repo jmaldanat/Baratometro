@@ -57,10 +57,16 @@ class AlertChannel(models.TextChoices):
 class ProductAlert(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='product_alerts')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='alerts')
+    saved_product = models.ForeignKey('SavedProduct', on_delete=models.CASCADE, related_name='alerts', null=True)
     channels = models.CharField(max_length=100)  # Almacena los canales seleccionados como texto separado por comas
     created_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
     message = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'saved_product'], name='unique_alert_per_saved_product')
+        ]
 
     def get_channels_list(self):
         return [c for c in self.channels.split(',') if c]
