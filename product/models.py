@@ -76,6 +76,11 @@ class ProductPrice(models.Model):
     sku = models.CharField(max_length=100, blank=True, null=True)  # SKU del producto
     link = models.URLField(blank=True, null=True)  # URL del producto en la tienda
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['product', 'store'], name='unique_product_store_price')
+        ]
+
     def save(self, *args, **kwargs):
         """
         Overrides the save method to update historical min/max prices.
