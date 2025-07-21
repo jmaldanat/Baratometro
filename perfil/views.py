@@ -117,7 +117,11 @@ class AlertsView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        # Obtén todas las alertas de productos del usuario
         product_alerts = ProductAlert.objects.select_related('product').filter(user=user)
         context['product_alerts'] = product_alerts
+        # Añade can_save_more al contexto
+        can_save_more = True
+        if user.is_authenticated and hasattr(user, 'perfil'):
+            can_save_more = user.perfil.can_save_more_products()
+        context['can_save_more'] = can_save_more
         return context
