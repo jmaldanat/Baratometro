@@ -1,6 +1,7 @@
 {% extends "newbase.html" %}
 {% load static %}
 {% load perfil_extras %}
+{% load product_extras %}
 {% block Content %}
 {% url 'account_logout' as logout_url %}
 
@@ -93,7 +94,7 @@
                                             <h5 class="card-title">{{ saved.product.name }}</h5>
                                             <p class="card-text">
                                                 {% if saved.min_price %}
-                                                Precio más bajo: £{{ saved.min_price }}
+                                                Precio más bajo: {{ saved.min_price|cop }}
                                                 {% else %}
                                                 No disponible
                                                 {% endif %}

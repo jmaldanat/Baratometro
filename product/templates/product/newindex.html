@@ -2,6 +2,7 @@
 {% load static %}
 {% block Content %}
 {% block Hero %}
+{% load product_extras %}
 <header>
     <div class="container">
         <div class="container-fluid bg-dark text-white py-5 rounded-4 mb-4 position-relative overflow-hidden"
@@ -55,8 +56,8 @@
                                             </div>
                                             <h5 class="card-title">{{ price_entry.product.name }}</h5>
                                             <p class="card-text">
-                                                {{ price_entry.store.name }} | £{{ price_entry.price_min }} 
-                                                <del>£{{ price_entry.price_max }}</del>
+                                                {{ price_entry.store.name }} | {{ price_entry.price_min|cop }}
+                                                <del>{{ price_entry.price_max|cop }}</del>
                                             </p>
                                         </div>
                                     </div>

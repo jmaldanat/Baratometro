@@ -1,6 +1,7 @@
 {% extends "newbase.html" %}
 {% load static %}
 {% load perfil_extras %}
+{% load product_extras %}
 {% block Content %}
 {% url 'account_logout' as logout_url %}
 
@@ -66,9 +67,9 @@
                                                 <span>{{ alert.product.name }}</span>
                                             </td>
                                             <td class="text-end">{{ alert.created_at|date:"d F Y" }}</td>
-                                            <td class="text-end">£{{ alert.product.prices.first.price }}</td>
-                                            <td class="text-end">£{{ alert.min_price_now }}</td>
-                                            <td class="text-end">£{{ alert.target_price }}</td>
+                                            <td class="text-end">{{ alert.product.prices.first.price|cop }}</td>
+                                            <td class="text-end">{{ alert.min_price_now|cop }}</td>
+                                            <td class="text-end">{{ alert.target_price|cop }}</td>
                                             <td class="text-end">
                                                 <div class="dropdown">
                                                     <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown"
@@ -153,15 +154,15 @@
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <small>Starting price</small><br>
-                                            <strong>£{{ alert.product.prices.first.price }}</strong>
+                                            <strong>{{ alert.product.prices.first.price|cop }}</strong>
                                         </div>
                                         <div>
                                             <small>Price now</small><br>
-                                            <strong>£{{ alert.min_price_now }}</strong>
+                                            <strong>{{ alert.min_price_now|cop }}</strong>
                                         </div>
                                         <div>
                                             <small>Threshold</small><br>
-                                            <strong>£{{ alert.target_price }}</strong>
+                                            <strong>{{ alert.target_price|cop }}</strong>
                                         </div>
                                     </div>
                                 </div>
