@@ -87,7 +87,13 @@
                                                     <div>
                                                         <strong>{{ price.store.name }}</strong>
                                                         <p class="mb-1">
-                                                            <small>{% if price.status.name %}{{ price.status.name }}{% endif %}</small>
+                                                            <small>
+                                                                {% if price.status.name %}{{ price.status.name }}{% endif %}
+                                                            </small>
+                                                            <br>
+                                                            <small class="text-muted">
+                                                                {% if price.updated_on %}Actualizado {{ price.updated_on|date:"d M Y H:i" }}{% endif %}
+                                                            </small>
                                                         </p>
                                                     </div>
                                                     <div>
@@ -107,7 +113,13 @@
                                                     <div>
                                                         <strong>{{ price.store.name }}</strong>
                                                         <p class="mb-1">
-                                                            <small>{% if price.status.name %}{{ price.status.name }}{% endif %}</small>
+                                                            <small>
+                                                                {% if price.status.name %}{{ price.status.name }}{% endif %}
+                                                            </small>
+                                                            <br>
+                                                            <small class="text-muted">
+                                                                {% if price.updated_on %}Actualizado {{ price.updated_on|date:"d M Y H:i" }}{% endif %}
+                                                            </small>
                                                         </p>
                                                     </div>
                                                     <div>
