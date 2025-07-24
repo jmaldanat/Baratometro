@@ -169,10 +169,10 @@
             if (form && input && trackBtn) {
                 form.addEventListener('submit', function (e) {
                     const url = input.value.trim();
-                    const regex = /^https?:\/\/www\.(exito|jumbocolombia|olimpica)\.com\//;
+                    const regex = /^https?:\/\/www\.(exito|jumbocolombia|olimpica|carulla)\.com\//;
                     if (!regex.test(url)) {
                         e.preventDefault();
-                        alert('La URL debe contener "exito", "jumbocolombia" o "olimpica" entre "www." y ".com".');
+                        alert('La URL debe contener "exito", "jumbocolombia", "olimpica" o "carulla" entre "www." y ".com".');
                         input.focus();
                     } else {
                         trackBtn.disabled = true;
